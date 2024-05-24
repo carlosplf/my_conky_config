@@ -1,3 +1,3 @@
 # My Conky config
 
-![Screenshot](./screscreenshot.png)
+![Screenshot](./screenshot.png)
