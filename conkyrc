@@ -1,0 +1,114 @@
+conky.config = {
+
+background = true,
+update_interval = 1,
+
+cpu_avg_samples = 2,
+net_avg_samples = 2,
+temperature_unit = 'celsius',
+
+double_buffer = true,
+no_buffers = true,
+text_buffer_size = 2048,
+
+gap_x = 10,
+gap_y = 40,
+minimum_width = 250, minimum_height = 450,
+maximum_width = 250,
+own_window = true,
+own_window_type = 'normal',
+own_window_argb_visual = true,
+own_window_transparent = true,
+own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
+own_window_argb_value = 0,
+own_window_colour = '000000',
+border_inner_margin = 0,
+border_outer_margin = 0,
+alignment = 'top_right',
+
+draw_shades = false,
+draw_outline = false,
+draw_borders = false,
+draw_graph_borders = false,
+
+
+
+override_utf8_locale = true,
+use_xft = true,
+font = 'Open Sanslight:size=8',
+xftalpha = 1.0,
+uppercase = yes,
+
+default_color = 'FFFFFF',
+color1 = 'FFFFFF',
+color2 = 'FFFFFF',
+color3 = 'FFFFFF',
+color4 = 'FFFFFF',
+
+lua_load = '~/.conky/bargraph.lua',
+lua_draw_hook_post = 'main_bars',
+lua_draw_hook_pre = 'background'};
+
+conky.text = [[
+${image /home/carlos/.conky/images/ubuntu.png -p 20,30 -s 30x30}
+${image /home/carlos/.conky/images/amd_logo.png -p 20,192 -s 60x14}
+${image /home/carlos/.conky/images/mem.png -p 20,454 -s 40x40}
+${image /home/carlos/.conky/images/ssd.png -p 20,614 -s 40x40}
+${image /home/carlos/.conky/images/gpu.png -p 20,738 -s 30x30}
+${image /home/carlos/.conky/images/updown.png -p 20,864 -s 20x20}
+
+${voffset -112}
+
+${goto 60}${font Open Sans:bold:size=13}System Info
+${voffset -1}
+#${goto 20}${color}${font Open Sans:bold:size=9}User: ${color1}
+#${goto 20}${exec whoami}@${nodename} (${exec id -u})
+${goto 20}${color}${font Open Sans:normal:size=9}Kernel: ${alignr 16}${font Open Sans:normal:size=9}${color1}${kernel}
+${goto 20}${color}${font Open Sans:normal:size=9}Gnome: ${alignr 16}${font Open Sans:normal:size=9}${color1}${exec gnome-shell --version | sed 's/\GNOME Shell //g'}
+${goto 20}${color}${font Open Sans:normal:size=9}Uptime: ${alignr 16}${font Open Sans:normal:size=9}${color1}${uptime}
+${voffset 0}
+${hr 1}
+
+${voffset -20}
+${goto 88}${font Open Sans:bold:size=13}${color}CPU
+${goto 20}${font Open Sans:normal:size=10}${color1}Model:${alignr 16}${execi 1000 cat /proc/cpuinfo | grep 'model name' | cut -c 13-30 | head -n 1}
+${goto 20}${font Open Sans:normal:size=10}${color1}Temperature:${alignr 16}${execi 1 sensors | grep 'Tctl' | cut -c 16-19}°C
+${goto 20}${font Open Sans:normal:size=10}${color}Processes:${alignr 16}${font Open Sans:normal:size=9}$processes
+${voffset 140}
+${hr 1}
+
+${voffset -20}
+${goto 70}${font Open Sans:bold:size=13}${color}Memory
+${goto 20}${font Open Sans:normal:size=9}${color1}${top_mem name 1}${alignr 16}${font Open Sans:normal:size=9}${top_mem mem 1}%
+${goto 20}${font Open Sans:normal:size=9}${color1}${top_mem name 2}${alignr 16}${font Open Sans:normal:size=9}${top_mem mem 2}%
+${goto 20}${font Open Sans:normal:size=9}${color1}${top_mem name 3}${alignr 16}${font Open Sans:normal:size=9}${top_mem mem 3}%
+${voffset 5}
+${goto 20}${font Open Sans:normal:size=9}${color1}${alignr 16}${font Open Sans:normal:size=9}${mem}/${memmax}
+${voffset -8}
+${hr 1}
+
+${voffset -20}
+${goto 70}${font Open Sans:bold:size=13}${color}Storage
+${voffset 0}
+${goto 20}${font Open Sans:bold:size=9}${color1}/${alignr 16}${font Open Sans:normal:size=9}${fs_used /}/${fs_size /} 
+${voffset -8}
+${hr 1}
+
+${voffset -14}
+${goto 60}${font Open Sans:bold:size=13}${color1}GPU${alignr}${offset -50}${color1}
+${goto 20}${font Open Sans:normal:size=9}${color1}Model:${alignr 16}${font Open Sans:normal:size=9}RX 580 8GB
+${goto 20}${font Open Sans:normal:size=9}${color1}Usage:${alignr 16}${font Open Sans:normal:size=9}${execi 2 radeontop -d - -l 1 | grep -o "gpu [0-9]\+.[0-9]\+" | cut -c 4-8}% 
+${goto 20}${font Open Sans:normal:size=9}${color1}VRAM:${alignr 16}${font Open Sans:normal:size=9}${execi 2 radeontop -d - -l 1 | grep -o "vram [0-9]\+.[0-9]\+" | cut -c 5-10}% 
+${voffset -8}
+${hr 1}
+
+${voffset -20}
+${goto 50}${font Open Sans:bold:size=13}${color1}Net${alignr}${offset -50}${color1}
+${goto 20}${font Open Sans:normal:size=9}${color1}Internal IP${alignr 16}${font Open Sans:normal:size=9}${if_up enp4s0}${addr enp4s0}${endif}${if_up wlan0}${addr wlan0}${endif}
+${goto 20}${font Open Sans:normal:size=9}${color1}Uplink ${alignr 16}${color}${font Open Sans:normal:size=9}${upspeed enp4s0}
+${goto 20}${font Open Sans:normal:size=9}${color1}Downlink ${alignr 16}${color}${font Open Sans:normal:size=9}${downspeed enp4s0}
+${voffset 2}
+${goto 20}${font Open Sans:normal:size=9}${color1}${downspeedgraph enp4s0 30, 214}
+
+]];
+
